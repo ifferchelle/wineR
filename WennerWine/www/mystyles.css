@@ -1,0 +1,63 @@
+/*
+@media (max-device-width: 480px) {
+  a[href*="https://www.cellartracker.com/"] {display: none;}
+  }
+@media (min-device-width: 480px) {
+  a[href*="cellartracker://"] {display: none;}
+  }
+*/
+
+@media (min-device-width: 0px) {
+  a[href*="cellartracker://"] {display: none;}
+  }
+
+.navbar-brand {
+    font-family: 'Euphoria Script';
+}
+
+body {
+    font-size: 0.75rem;
+}
+
+a {
+  color: #722f37;
+}
+a:hover, a:focus {
+  color: #3c191d;
+}
+
+
+.irs-bar, .irs-single, .irs-bar-edge, .irs-grid-pol {
+    border-top: 1px solid #722f37 !important;
+    border-bottom: 1px solid #722f37 !important;
+    background: #722f37 !important;
+}
+
+.irs-to, .irs-from, .irs-single {
+    background: #722f37 !important;
+}
+
+
+h1, h2, h3, h4, h5, h6, label.control-label, .nav-tabs-custom>.nav-tabs>li.header, .nav-tabs-custom>.nav-tabs>li>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a, .nav-tabs-custom>.nav-tabs>li.active>a {
+  color: #3c191d;
+}
+
+nav.navbar.navbar-static-top, .navbar.navbar-inverse.navbar-fixed-top {
+    background: url(corkscrew.svg) no-repeat right;
+    background-size:41px 30px;
+    background-origin: content-box, padding-box;
+    padding:0 20px 0 0
+}
+
+.navbar-logo {
+    padding: 5px;
+    max-width: 48px;
+}
+
+.nav-tabs-custom>.nav-tabs>li.active {
+    border-top-color: #722f37;
+}
+
+div.datatables {
+    overflow: scroll;
+}

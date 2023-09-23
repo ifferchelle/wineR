@@ -1,0 +1,76 @@
+---
+title: "Wine Dash"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      version: 4
+      bg: "#fafafa"
+      fg: "#722f37" 
+      primary: "#ffffff"
+      navbar-bg: "#3c191d"
+      base_font: 
+        google: "Nunito Sans"
+      heading_font:
+        google: "Euphoria Script"
+    orientation: columns
+    vertical_layout: fill
+    logo: "WennerWine/www/wine.ico"
+    favicon: "WennerWine/www/wine.ico"
+    css: "WennerWine/www/mystyles.css"
+
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(flexdashboard)
+library(crosstalk)
+# devtools::install_github("kent37/summarywidget")
+library(summarywidget)
+```
+
+```{r data}
+source('R/update-wine.R')
+wine_tbl <- wine_tbl %>% select(-Blend)
+
+shared_data <- SharedData$new(wine_tbl,key = ~iWine,
+                              group = 'wine')
+shared_consumed_data <- SharedData$new(consumed_tbl, key = ~iWine, group = 'wine')
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Filters
+
+```{r}
+filter_checkbox('type', 'Type', shared_data, ~Type, inline = T)
+filter_slider("price", "Price", shared_data, ~Price, width = "100%",pre = '$')
+filter_slider("vintage", "Vintage", shared_data, ~Vnt, width = "100%",sep = '')
+filter_slider("quant", "Quantity", shared_data, ~Qty, width = "100%")
+filter_select("var", "Varietal", shared_data, ~Varietal)
+```
+
+
+
+Column {data-width=650} {.tabset .tabset-fade}
+-----------------------------------------------------------------------
+
+### Available 
+
+<p>`r summarywidget(shared_data)` bottles available with selected filters.</p>
+
+```{r}
+DT::datatable(shared_data,rownames = F,escape = F,
+              options=list(columnDefs = list(list(visible=FALSE, targets=c(0,2)))))
+```
+
+### Consumed 
+
+<p>`r summarywidget(shared_consumed_data)` bottles available with selected filters.</p>
+
+```{r}
+DT::datatable(shared_consumed_data,rownames = F,escape = F,   
+              options=list(columnDefs = list(list(visible=FALSE, targets=c(0)))))
+```
+
+

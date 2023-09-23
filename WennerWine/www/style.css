@@ -1,0 +1,423 @@
+/*
+@media (max-device-width: 480px) {
+  a[href*="https://www.cellartracker.com/"] {display: none;}
+  }
+@media (min-device-width: 480px) {
+  a[href*="cellartracker://"] {display: none;}
+  }
+*/
+
+
+@media (min-device-width: 0px) {
+  a[href*="cellartracker://"] {display: none;}
+  }
+
+
+
+
+
+/* general header & body font */
+h1.title {
+    font-size: 32px;
+    font-weight: bold;
+    font-family: "Segoe UI"
+    color: #3c191d;
+  }
+h1 { /* Header 1 */
+    font-size: 24px;
+    font-weight: bold;
+  font-family: "Segoe UI"
+  color: #3c191d;
+}
+h2 { /* Header 2 */
+    font-size: 18px;
+    font-weight: bold;
+  font-family: "Segoe UI"
+  color: #3c191d;
+}
+h3 { /* Header 3 */
+    font-size: 18px;
+    font-weight: bold;
+  font-family: "Segoe UI"
+  color: #3c191d;
+}
+h4.author { /* Header 3 */
+    font-size: 18px;
+  font-family: "Segoe UI"
+  color: #555555;
+}
+h4.date { /* Header 3 */
+    font-size: 18px;
+  font-family: "Segoe UI"
+  color: #555555;
+    font-style: italic;
+}
+body {
+  font-family: "Segoe UI"
+  font-size: 16px;
+  background-color: rgba(247, 247, 247, 0.7);
+}
+a {
+  color: #722f37;
+}
+a:hover, a:focus {
+  color: #3c191d;
+}
+
+
+/* buttons */
+
+.btn {
+  border-width: 0 0px 0px 0px;
+  font-weight: normal;
+  color: #ffffff;
+    background-color: #722f37;
+    border-color: #722f37;
+}
+.btn-default {
+  color: #722f37;
+    background-color: rgba(247, 247, 247, 0.7);
+    background-color: rgba(247, 247, 247, 0.7);
+}
+
+/* horizonal rule */
+
+hr {
+  border-top:1px solid #a84551 !important;
+  width:80%;
+  border-bottom:0 !important;
+}
+
+/** tabset
+*/
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+  color: #ffffff;
+    background-color: #722f37;
+}
+
+.nav-pills > li.active > a:hover {
+  color: #722f37;
+    background-color: #fff;
+    text-decoration: none;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: #3c191d;
+    border-color: #3c191d;
+}
+
+/** Summary Block Chunk which outlines in Cone Blue
+*/
+
+.summaryblock{
+  padding: 1em 1em 1em 1em;
+  margin-bottom: 10px;
+  color: #333E50;
+  border-style: solid;
+  border-width: 5px;
+  border-color: #722f37;
+}
+
+.summaryblock > a {
+  color: #d8dfee;
+}
+
+/** Alter Box in Clemson Orange
+*/
+
+.alertblock{
+  padding: 1em 1em 1em 1em;
+  margin-bottom: 10px;
+  color: #333E50;
+  border-style: solid;
+  border-width: 5px;
+  border-color: #F66733;
+}
+
+.alertblock > a {
+  color: #d8dfee;
+}
+
+/**Automatically resize to full screen
+*/
+
+.main-container {
+  max-width: 95% !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.list-group-item{
+  background-color: rgba(247, 247, 247, 0.7);
+}
+
+/** Weird Code Folding Issues
+*/
+
+div.sourceCode {
+  overflow-x: hidden;
+}
+
+
+.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+.tip {
+    padding: 0.5em;
+    background-color: #dbfaf4;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* leaflet */
+.leaflet, .leaflet .info{
+  font-family: "Segoe UI"
+}
+
+.legend{
+clear:initial !important;
+}
+
+/* tables */
+
+th, tr>th{background-color: #722f37;
+color:white}
+
+tr{color:#3c191d}
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+.table{
+      width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    max-width:95%;
+}
+
+.table>tbody>tr>td{
+  padding:3px 20px 3px 20px;
+}
+
+.table>thead>tr>th{
+  padding:5px 20px 5px 20px;
+}
+
+/** warning and information block divs */
+.warning {
+    display: inline-flex;
+    margin: 30px;
+    font-weight: 700;
+    font-size: 16px;
+    /* font-size: 1rem; */
+    line-height: 1.25;
+    color: #0b0c0c;
+}
+
+.warning:before {
+    display: inline-block;
+    margin: 10px;
+    content: "!";
+    color: white;
+    background: #d4351c;
+    font-weight: 700;
+    left: 50px;
+    min-width: 35px;
+    max-width: 35px;
+    max-height: 35px;
+    min-height: 35px;
+    margin-top: -7px;
+    border-radius: 50%;
+    font-size: 30px;
+    line-height: 35px;
+    text-align: center;
+}
+
+
+.information {
+    display: inline-flex;
+    margin: 30px;
+    font-weight: 700;
+    font-size: 16px;
+    /* font-size: 1rem; */
+    line-height: 1.25;
+    color: #0b0c0c;
+}
+
+.information:before {
+    display: inline-block;
+    font-family: "serif";
+    margin: 10px;
+    content: "i";
+    color: white;
+    background: #722f37;
+    font-weight: 700;
+    left: 50px;
+    min-width: 35px;
+    max-width: 35px;
+    max-height: 35px;
+    min-height: 35px;
+    margin-top: -7px;
+    border-radius: 50%;
+    font-size: 30px;
+    line-height: 35px;
+    text-align: center;
+}
+
+
+/* boxes? */
+
+
+.mybox {
+    float: left;
+    border: 1px solid #3c191d !important;
+    margin: 3pt;
+    padding: 5px;
+    width: 45%;
+    border-top: 1px solid #3c191d !important;
+}
+
+.mybox p {
+  color: #FFFFFF !important;
+    text-align: center;
+    font-size: 14px;
+}
+.mybox b {
+  color: #FFFFFF !important;
+}
+
+.mybox strong{
+  color: #FFFFFF !important;
+}
+
+
+
+
+/* tabs - class for makeshift tabsets */
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  grid-column: page;
+}
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  font-family: "Segoe UI"
+  color: #722f37;
+  font-weight: bold;
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #3c191d;
+  color:#ffffff;
+}
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #722f37;
+  color:#ffffff;
+}
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border-top: none;
+  border-left: 1px #CCCCCC solid;
+  border-right: 1px #CCCCCC solid;
+  border-bottom: 1px #CCCCCC solid;
+}
+
+/* flex column content - breaks on p, div, span */
+
+.columns {
+  display: flex;
+  flex-basis: auto;
+  grid-column: page;
+}
+
+
+/* Create two equal columns that floats next to each other */
+.twocol {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Create three equal columns that floats next to each other */
+.threecol {
+  float: left;
+  width: 33.3333%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.column-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/************** highcharter ************************************/
+
+/*background transparent*/
+rect.highcharts-background {
+    fill: transparent;
+}
+
+/*download/full-screen dropdown format*/
+li.highcharts-menu-item {
+    font-family: "Segoe UI"
+    margin: 0;
+}
+
+/*download/full-screen dropdown hover*/
+li.highcharts-menu-item:hover {
+    background-color: #3c191d !important;
+}
+
+/*download/full-screen dropdown hr*/
+ul.highcharts-menu hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* center anything by adding andcenter to div */
+.andcenter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/*reactables*/
+.irs-bar {
+    background: #722f37;
+    border-top: #722f37;
+    border-bottom: #722f37;
+}
+
+.irs-to, .irs-from, .irs-single {
+    background: #722f37 !important;
+}

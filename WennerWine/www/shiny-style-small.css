@@ -1,0 +1,24 @@
+/*addition for shiny app with lots of content*/
+  label{
+    font-size:12px;
+  }
+
+.form-control,.selectize-input{
+  font-size:12px;
+  font-weight:bold;
+  color:#00A2B2
+}
+
+.box{
+  min-width: min-content;
+}
+
+body{font-size:12px;}
+.sidebar-menu{font-size:14px;}
+
+h1{font-size:30px;}
+h2{font-size:24px;}
+h3{font-size:20px;}
+h4{font-size:18px;}
+h5{font-size:16px;}
+h6{font-size:14px;}
