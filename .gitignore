@@ -2,3 +2,5 @@
 .Rproj.user
 .Rhistory
 */rsconnect/
+*_files/
+dashboard.html

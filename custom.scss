@@ -1,0 +1,70 @@
+/*-- scss:defaults --*/
+
+$primary:  #722f37;
+$secondary: #ffffff;
+$primary-alt: #3c191d;
+$secondary-alt: #fafafa;
+
+$body-bg: $secondary-alt;
+$body-color: $primary-alt;
+$link-color: $primary;
+$input-color: $primary;
+$popover-bg: $secondary;
+
+$headings-font-family: "Euphoria Script" ;
+$font-family-sans-serif: "Nunito Sans";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Euphoria+Script&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+
+@media (min-device-width: 0px) {
+  a[href*="cellartracker://"] {display: none;}
+  }
+
+/*wine glass icon colors*/
+
+.filter-red{
+    filter: invert(12%) sepia(51%) saturate(4248%) hue-rotate(349deg) brightness(94%) contrast(120%);
+  }
+
+
+.filter-white{
+  filter: invert(71%) sepia(98%) saturate(556%) hue-rotate(359deg) brightness(102%) contrast(104%);
+}
+
+.filter-sparkling{
+  filter: invert(84%) sepia(27%) saturate(5%) hue-rotate(314deg) brightness(86%) contrast(93%);
+}
+
+.filter-rose{
+  filter: invert(65%) sepia(28%) saturate(1616%) hue-rotate(299deg) brightness(93%) contrast(84%);
+}
+
+.filter-sweet{
+  filter: invert(0%) sepia(100%) saturate(0%) hue-rotate(164deg) brightness(95%) contrast(103%);
+}
+
+
+/*reactables*/
+.irs-bar {
+    background: $primary !important;
+    border-top: $primary !important;
+    border-bottom: $primary !important;
+}
+
+.irs-to, .irs-from, .irs-single {
+    background: $primary !important;
+}
+
+.rt-td-footer .rt-text-content{
+    color: $primary;
+    overflow-wrap: normal;
+    overflow: visible;
+}
+
+
+.navbar-logo{
+  width: 30px;
+}
+

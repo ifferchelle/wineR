@@ -30,6 +30,15 @@ dashboardPage(
     tabsetPanel(
         tabPanel('Wine List',
                  br(),
+                   tags$strong(sum(wine_tbl$Qty), ' Total: '),
+                 color_img('red'), tags$strong(color_cnt('red')),' reds | ',
+                 color_img('white'), tags$strong(color_cnt('white')),' whites | ',
+                 color_img('rose'), tags$strong(color_cnt('rose')),' rosés | ',
+                 color_img('sparkling'), tags$strong(color_cnt('sparkling')),' bubbles | ',
+                 color_img('sweet'), tags$strong(color_cnt('sweet')), 'sweet/port',
+                 br(),br(),
+
+                 # <img src="glass.svg" class="filter-red" height="15px">
     bscols(
         widths = c(2, 10),device = 'sm',
         list(
@@ -44,7 +53,27 @@ dashboardPage(
                  tabPanel('Varietals',
         plotlyOutput('var_plot',height = '800px')),
         tabPanel('Region',
-               plotlyOutput('reg_plot', height = '500px')))
+               plotlyOutput('reg_plot', height = '500px')),
+        tabPanel('Price',
+                 inputPanel(selectizeInput('pp_varietal', 'Varietals',
+                                           choices = sort(unique(wine_tbl$Varietal)),
+                                           multiple = TRUE),
+                            selectizeInput('pp_type', 'Type',
+                                           choices = sort(unique(wine_tbl$Type)),
+                                           multiple = TRUE),
+                            numericInput('pp_vint_low','Oldest Vintage',
+                                         value = min(wine_tbl$Vnt, na.rm = T),
+                                         min = min(wine_tbl$Vnt, na.rm = T),
+                                         max= max(wine_tbl$Vnt, na.rm = T)),
+                            numericInput('pp_vint_high', 'Latest Vintage',
+                                         value = max(wine_tbl$Vnt, na.rm = T),
+                                         min = min(wine_tbl$Vnt, na.rm = T),
+                                         max= max(wine_tbl$Vnt, na.rm = T)),
+                            checkboxInput('pp_include_nv', 'Include Non-Vintage?',
+                                          value = TRUE)
+                            ),
+                 uiOutput('price_ui')
+                 ))
     ),
     tabPanel('Maps',
              # tabsetPanel(type = 'pills',
@@ -62,7 +91,23 @@ dashboardPage(
                       )
              ),
     tabPanel('Consumed',
-             reactableOutput('consumed_tbl'))
+             reactableOutput('consumed_tbl')),
+    tabPanel('Inspect',
+
+             tabBox(
+               title = "Inspection",
+               # The id lets us use input$tabset1 on the server to find the current tab
+               id = "tabset1",width = 12,
+               tabPanel('Cold Status',
+                        h3('Cold Status by Varietal'),
+                        reactableOutput('inspect_tbl')),
+               tabPanel("Space",
+                        h3('Room in Fridge'),
+                        reactableOutput('room_tbl'))
+             )
+
+
+             )
     )
     )
 )

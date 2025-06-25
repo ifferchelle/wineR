@@ -1,0 +1,8 @@
+---
+title: "TODO"
+format: html
+---
+
+1. Summary of consumed and available by producer/wine rather than just varietal.
+1. Filters for N.C. wine & anniversary (2014) wines
+1. Prioritization of wines to drink and wines to put in the fridge next (based on age as well as producer/price... think of how to create algorithm for appropriate prioritization)

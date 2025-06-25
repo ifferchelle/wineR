@@ -141,7 +141,7 @@ url_bottles <- "https://awctstorageacct.blob.core.windows.net/ctblob/bottles.csv
 req <- GET(url)
 if(req$status_code==200){
   wine <- content(req, type = "text/csv", encoding = 'UTF-8')
-  } else stop('Bad request.')
+} else stop('Bad request.')
 
 req2 <- GET(url_bottles)
 if(req2$status_code==200){
@@ -163,14 +163,14 @@ wine_consumed <- wine_bottles |>
             Wine, Type, Locale,
             Store,
             `Consumption Date` = as.Date(ConsumptionDate,
-                                      "%m/%d/%Y"),
+                                         "%m/%d/%Y"),
             Price = scales::dollar(BottleCost, accuracy = 1),
             Note) |>
-    arrange(desc(`Consumption Date`)) |>
-    separate(col = Locale,sep = ', ',extra = 'merge',
-             fill = 'right',remove = T,
-             into = c('Country', 'Region', 'SubRegion',
-                                    'Appellation')) |>
+  arrange(desc(`Consumption Date`)) |>
+  separate(col = Locale,sep = ', ',extra = 'merge',
+           fill = 'right',remove = T,
+           into = c('Country', 'Region', 'SubRegion',
+                    'Appellation')) |>
   mutate(SubRegion = case_when(!is.na(SubRegion) & !is.na(Appellation)~
                                  paste0(SubRegion,' - ',Appellation),
                                !is.na(SubRegion)~SubRegion,
@@ -181,7 +181,7 @@ wine_consumed <- wine_bottles |>
 wine_purchased <- wine_bottles |> filter(BottleState!=0) |>
   transmute(iWine, Store,
             `Purchase Date` = as.Date(PurchaseDate,"%m/%d/%Y")
-            ) |>
+  ) |>
   arrange(Store, `Purchase Date`) |>
   group_by(iWine) |>
   summarise(Store = c_unique(Store),
@@ -259,15 +259,15 @@ wine_tbl <- wine |> ungroup() |>
                            TRUE~tolower(Type)),
          TypeColor = mapply(x = Type, y=Color,
                             function(x, y)paste0(color_img(y),
-                                                    htmltools::tags$span(x),
-                                                    collapse = '')),
+                                                 htmltools::tags$span(x),
+                                                 collapse = '')),
          Wine = mapply(x = iWine, y = Wine, z=Color,
                        function(x, y, z)paste0(color_img(z),
-                         htmltools::tags$a(href = paste0(app_link_fmt,x),
-                                     target = "_blank", y),
-                                     htmltools::tags$a(href = paste0(desk_link_fmt,x),
-                                                                  target = "_blank", y),
-                                     collapse = '')),
+                                               htmltools::tags$a(href = paste0(app_link_fmt,x),
+                                                                 target = "_blank", y),
+                                               htmltools::tags$a(href = paste0(desk_link_fmt,x),
+                                                                 target = "_blank", y),
+                                               collapse = '')),
          Blend = ifelse(grepl('Blend',MasterVarietal),T,F),
          Varietal = MasterVarietal,
          Location = paste0(ifelse(!is.na(Location),
@@ -286,7 +286,7 @@ wine_tbl <- wine |> ungroup() |>
                                !is.na(Appellation)~Appellation,
                                TRUE~''),
          Vnt = ifelse(Vintage == 1001, NA, Vintage)
-         ) |>
+  ) |>
   # select(-iWine, -Valuation,
   #        -Size, -MasterVarietal,
   #        -Bin, -Appellation) |>
@@ -301,7 +301,7 @@ wine_tbl <- wine |> ungroup() |>
             Varietal = c_unique(Varietal),
             Blend = any(Blend, na.rm = T),
             Price = round(max(Price, na.rm = T)),
-            #Producer = c_unique(Producer),
+            Producer = c_unique(Producer),
 
             Country = c_unique(Country),
             Region = c_unique(Region),
@@ -314,21 +314,21 @@ wine_tbl <- wine |> ungroup() |>
             Store = c_unique(Store),
             Purchased = max(Purchased)
 
-            ) |>
+  ) |>
 
   mutate(VarietalInspect = if_else(Type %in% c('Red', 'White'),
                                    Varietal, 'All'),
          Price = ifelse(is.infinite(Price), NA, Price),
          Price2 = cut(ifelse(is.na(Price),0,Price),
-                                     c(-Inf,14,24,34,49,74,99,149,Inf),
-                                     price_labels),
+                      c(-Inf,14,24,34,49,74,99,149,Inf),
+                      price_labels),
          Begin = ifelse(is.infinite(Begin), NA, Begin),
          End = ifelse(is.infinite(End), NA, End),
          Rating = ifelse(is.infinite(Rating), NA, Rating),
          Rating = mapply(x = iWine, y = Rating,
                          function(x, y)ifelse(is.na(y),'',
                                               paste0(htmltools::tags$a(href = paste0(rating_link_fmt,x),
-                                                                target = "_blank", y),
+                                                                       target = "_blank", y),
                                                      collapse = ''))),
          Rating = ifelse(Rating!='', Rating, NA),
          Blend = ifelse(Blend, 'Blend', 'Single Varietal'),
@@ -344,7 +344,7 @@ color_cnt <- function(color){
 
 inspect_tbl <- wine_tbl |>
   mutate(VarietalInspect = if_else(Type %in% c('Red', 'White'),
-                                     Varietal, 'All')) |>
+                                   Varietal, 'All')) |>
   group_by(Type, TypeColor, VarietalInspect) |>
   summarise(across(c(Qty, Cold), sum), .groups = 'drop') |>
   filter(Qty!=Cold) |>
@@ -367,14 +367,14 @@ capacity <-bind_rows(tibble(Location = 'A Fridge', Bin = sprintf('%02.f',1:14)),
                                Location=='A Fridge' ~ 'A Fridge - Bottom',
                                TRUE~Location),
          Capacity = case_when(grepl('^Rack',Location) & Bin!='Top' ~ 4,
-                   Location=='A Fridge' & Bin %in% c('01','10') ~ 11 + 9,
-                   Location=='A Fridge' ~ 11,
-                   TRUE ~ 0))
+                              Location=='A Fridge' & Bin %in% c('01','10') ~ 11 + 9,
+                              Location=='A Fridge' ~ 11,
+                              TRUE ~ 0))
 
 room_tbl <- wine_all |>
   mutate(Location2 = case_when(Location=='A Fridge' & as.numeric(Bin) <=5 ~ 'A Fridge -  Top',
-                   Location=='A Fridge' ~ 'A Fridge - Bottom',
-                   TRUE~Location)) |>
+                               Location=='A Fridge' ~ 'A Fridge - Bottom',
+                               TRUE~Location)) |>
   group_by(Location, Location2) |>
   summarise(Filled = sum(Quantity)) |>
   ungroup() |>
@@ -439,7 +439,7 @@ consumed_tbl <- wine_consumed |>
                                                htmltools::tags$a(href = paste0(desk_link_fmt,x),
                                                                  target = "_blank", y),
                                                collapse = '')),
-        Date = `Consumption Date`) |>
+         Date = `Consumption Date`) |>
   arrange(desc(Date)) |>
   select(-iWine, -Date,-Type,-Color)
 
@@ -502,28 +502,28 @@ price_graph <- function(varietal = NULL, type = NULL,
   if(nrow(plot_dat)<1) return(NULL)
 
 
-gg3 <- plot_dat |>
-  mutate(`Not Cold` = Qty-Cold,
-         Price = cut(ifelse(is.na(Price),0,Price),
-                     c(-Inf,14,24,34,49,74,99,149,Inf),
-                     price_labels) |> factor(levels = rev(price_labels))
-         ) |>
-  pivot_longer(cols = c(Cold, `Not Cold`)) |>
-  group_by(Price, Type, name) |>
-  reframe(Qty = sum(value)) |>
-  complete(Price, Type, name, fill = list(Qty = 0)) |>
-  ggplot(aes(x = Price, y = Qty, fill = Type)) +
-  geom_col() + coord_flip() +
-  scale_fill_manual(values = c('Red' = '#722f37',
-                               'White' = '#F3DB74',
-                               'Rosé' = '#EDAEC0',
-                               'Sparkling' = '#C0C0C0',
-                               'Port/Sweet' = '#000000')) +
-  labs(fill = NULL, y = 'Quantity Available',
-       x = NULL, title = 'Wines Available by Price') +
-  theme_minimal() +
-  facet_grid(.~name)
-return(gg3)
+  gg3 <- plot_dat |>
+    mutate(`Not Cold` = Qty-Cold,
+           Price = cut(ifelse(is.na(Price),0,Price),
+                       c(-Inf,14,24,34,49,74,99,149,Inf),
+                       price_labels) |> factor(levels = rev(price_labels))
+    ) |>
+    pivot_longer(cols = c(Cold, `Not Cold`)) |>
+    group_by(Price, Type, name) |>
+    reframe(Qty = sum(value)) |>
+    complete(Price, Type, name, fill = list(Qty = 0)) |>
+    ggplot(aes(x = Price, y = Qty, fill = Type)) +
+    geom_col() + coord_flip() +
+    scale_fill_manual(values = c('Red' = '#722f37',
+                                 'White' = '#F3DB74',
+                                 'Rosé' = '#EDAEC0',
+                                 'Sparkling' = '#C0C0C0',
+                                 'Port/Sweet' = '#000000')) +
+    labs(fill = NULL, y = 'Quantity Available',
+         x = NULL, title = 'Wines Available by Price') +
+    theme_minimal() +
+    facet_grid(.~name)
+  return(gg3)
 }
 
 wine_cntry <- wine_tbl|>group_by(Country) |>

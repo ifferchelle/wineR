@@ -1,80 +1,35 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
-library(shiny)
-
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-
-    observeEvent({input$refresh_list},
-                 GET(url = update_url),
-                 ignoreInit = T,
-                 ignoreNULL = T,
-                 once = T)
-
-    output$map <- renderHighchart({
-        hc
-    })
-
-    output$map_eur <- renderHighchart({
-        hc_eur
-    })
-
-    output$map_us <- renderHighchart({
-        hc_us
-    })
-
-    output$var_plot <- renderPlotly({
-        ggplotly(gg) %>%
-            layout(font = list(family = c('"Segeo UI","Open Sans", Arial'))) ##'"Segoe UI", Calibri, Tahoma, Arial, sans-serif'))
-    })
-
-    output$reg_plot <- renderPlotly({
-        ggplotly(gg2) %>%
-            layout(font = list(family = c('"Segeo UI","Open Sans", Arial'))) ##'"Segoe UI", Calibri, Tahoma, Arial, sans-serif'))
-    })
+---
+title: "Wenner Wine"
+format: 
+  dashboard: 
+    orientation: rows
+    logo: "WennerWine/www/wine.ico"
+    include-in-header:
+    - text: |
+        <link rel = "shortcut icon" href = "wine.ico" />
+    theme: 
+      - minty
+      - custom.scss
+---
 
 
-    price_gg <- reactive({
-      price_graph(varietal = input$pp_varietal,
-                  type = input$pp_type,
-                  vint_low = input$pp_vint_low,
-                  vint_high = input$pp_vint_high,
-                  include_nv = input$pp_include_nv)
-    })
-
-    output$price_plot <- renderPlotly({
-      gg <- price_gg()
-      if(!is.null(gg)) ggplotly(gg)
-    })
 
 
-    output$price_ui <- renderUI({
+```{r}
+#| eval: true
+#| include: false
 
-      if(!is.null(price_gg())){
-        plotlyOutput('price_plot')
-      } else{
-        h4('No wine found with filters provided.')
-      }
+source(here::here('R', '01-update.R'))
+```
 
-    })
-    output$filters <- renderUI({
-        if(length(input$GetScreenWidth)==0){
-            is_small <- F
-        } else if(is.na(input$GetScreenWidth)){
-            is_small <- F
-        } else is_small <- (input$GetScreenWidth<768)
+# Wine List
 
-        box(collapsible = T,
-            title = 'Wine Filters',
-            width = 12,
-            collapsed = is_small,
+## {.sidebar}
+
+```{r eval=TRUE}
+
+is_small <- FALSE
+
         div(style = css(fontFamily = 'Segoe UI',
                         fontSize = '12.5px'),
             filter_checkbox("cold", "Cold", shared_data, ~AnyCold,
@@ -88,13 +43,27 @@ shinyServer(function(input, output) {
                             inline = is_small),
             filter_slider("vintage", "Vintage", shared_data, ~Vnt, width = "100%",sep = ''),
             filter_slider("quant", "Quantity", shared_data, ~Qty, width = "100%"),
-            filter_select("var", "Varietal", shared_data, ~Varietal)
-        ))
-    })
+            filter_select("var", "Varietal", shared_data, ~Varietal),
+            filter_select("prod", "Producer", shared_data, ~Producer)
+        )
 
-    output$tbl <- renderReactable({
+```
 
-        reactable(shared_data, 'wine',
+## Main
+
+```{r}
+#| padding: 0
+
+title_text <- div(style = 'display: inline; min-height: 1rem; font-size: x-small; margin: 3px;',
+                  class = 'title',
+                   tags$strong(sum(wine_tbl$Qty), ' Total: '),
+                 color_img('red'), tags$strong(color_cnt('red')),' reds | ',
+                 color_img('white'), tags$strong(color_cnt('white')),' whites | ',
+                 color_img('rose'), tags$strong(color_cnt('rose')),' rosés | ',
+                 color_img('sparkling'), tags$strong(color_cnt('sparkling')),' bubbles | ',
+                 color_img('sweet'), tags$strong(color_cnt('sweet')), 'sweet/port')
+
+t <- reactable(shared_data, 'wine',
                              # theme = reactableThemeWine(searchInputStyle = list(width = "100%")),
                   fontSize = '12px',
                   searchable = TRUE,
@@ -105,7 +74,16 @@ shinyServer(function(input, output) {
                                     minWidth = 100),
                       Vnt = colDef(sortNALast = T,
                                    minWidth = 50),
-                      Qty = colDef(minWidth = 40),
+                      Qty = colDef(minWidth = 40,
+                                                                       html = TRUE, # Render as HTML
+      footer = JS("function(column, state) {
+        let total = 0;
+        state.sortedData.forEach(function(row) {
+          total += row[column.id];
+        });
+        return '<b>' + total + '</b>';
+      }")
+                                   ),
                       Varietal = colDef(show = T, minWidth = 80),
                       Region = colDef(minWidth = 80),
                       SubRegion = colDef(minWidth = 90),
@@ -119,7 +97,24 @@ shinyServer(function(input, output) {
                                       sortNALast = T,
                                       minWidth = 40),
                       Price = colDef(format = colFormat(prefix = "$",digits = 0),
-                                     sortNALast = T, minWidth = 50),
+                                     sortNALast = T, minWidth = 50,
+                                    #footer = \(x) tags$b(scales::dollar(sum(x)))
+                                    html = TRUE, # Render as HTML
+      footer = JS("function(column, state) {
+        let total = 0;
+        state.sortedData.forEach(function(row) {
+          total += row['Qty'] * row['Price'];
+        });
+          // Format the total with thousands separator and no decimals
+        let formattedTotal = total.toLocaleString('en-US', {
+          style: 'decimal',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        });
+        return '<b>$' + formattedTotal + '</b>';
+      }")
+      
+                                    ),
                       Price2 = colDef(show = FALSE),
                       Blend = colDef(show = FALSE,
                                      cell = function(value) {
@@ -131,14 +126,26 @@ shinyServer(function(input, output) {
                       VarietalInspect = colDef(show = FALSE),
                       Color = colDef(show = FALSE),
                       Country = colDef(minWidth = 75),
+                      Producer = colDef(show = F),
 
                       Store = colDef(minWidth = 75),
                       Purchased = colDef(minWidth = 65)
                   ))
 
-            })
 
-    output$consumed_tbl <- renderReactable({
+withtitle <- htmlwidgets::prependContent(t, 
+                                         title_text)
+
+
+withtitle
+
+
+```
+
+# Consumed
+
+```{r}
+#| padding: 0
 
         reactable(shared_data_consumed, 'wine',
                   fontSize = '12px',
@@ -147,14 +154,20 @@ shinyServer(function(input, output) {
                       Wine = colDef(html = TRUE))
         )
 
-    })
+```
 
 
+# Inspect 
 
+## Page {.tabset}
 
-    output$inspect_tbl <- renderReactable({
+### Cold Status
 
-      reactable(inspect_tbl, 'wine',
+```{r}
+#| expandable: false
+#| padding: 0
+
+reactable(inspect_tbl, 'wine',
                 fontSize = '12px',
                 details = function(index){
                   dropdown <- wine_tbl |> filter(Type==inspect_tbl$Type[index],
@@ -182,12 +195,16 @@ select(Wine, Price, Vnt, Location, Country, Region, SubRegion, Store, Purchased)
                   }
       )
 
-    })
+```
 
 
-    output$room_tbl <- renderReactable({
+### Space
 
-      reactable(room_tbl, 'wine',
+```{r}
+#| expandable: false
+#| padding: 0
+
+reactable(room_tbl, 'wine',
                 fontSize = '12px',
                 details = function(index){
                   dropdown <- room_tbl_dropdown |> filter(Location==room_tbl$Location[index])
@@ -215,9 +232,49 @@ select(Wine, Price, Vnt, Location, Country, Region, SubRegion, Store, Purchased)
                 searchable = TRUE
       )
 
-    })
+```
 
 
+# Maps
+
+## Row
+
+### Column {width=25%}
+
+```{r}
+#| padding: 0
+hc_us
+```
+
+### Column {width=50%}
+
+```{r}
+#| padding: 0
+hc
+```
+
+### Column {width=25%}
 
 
-})
+```{r}
+#| padding: 0
+hc_eur
+```
+
+# Plots
+
+## Row
+
+```{r}
+#| padding: 0
+ggplotly(gg) %>%
+            layout(font = list(family = c('"Segeo UI","Open Sans", Arial'))) ##'"Segoe UI", Calibri, Tahoma, Arial, sans-serif'))
+```
+
+```{r}
+#| padding: 0
+ggplotly(gg2) %>%
+            layout(font = list(family = c('"Segeo UI","Open Sans", Arial'))) ##'"Segoe UI", Calibri, Tahoma, Arial, sans-serif'))
+```
+
+
