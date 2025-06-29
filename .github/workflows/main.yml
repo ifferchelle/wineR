@@ -2,6 +2,10 @@ name: CI
 on:
   push:
     branches: [ main ]
+permissions: 
+  contents: write
+  pages: write
+
 jobs:
   main_job:
     runs-on: ubuntu-latest
@@ -13,9 +17,17 @@ jobs:
       - name: install R packages
         run: Rscript -e "install.packages(c('readr', 'dplyr', 'tidyr', 'ggplot2', 'lubridate', 'forcats', 'reactable', 'crosstalk','htmltools', 'curl', 'httr', 'countrycode', 'plotly', 'highcharter', 'here', 'htmlwidgets'))"
       - uses: quarto-dev/quarto-actions/setup@v2
-      - uses: quarto-dev/quarto-actions/render@v2
+ #     - uses: quarto-dev/quarto-actions/render@v2
+ #       with:
+ #         path: dashboard.qmd
+      - name: Publish to GitHub Pages (and render) 
+        uses: quarto-dev/quarto-actions/publish@v2
         with:
           path: dashboard.qmd
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+      
 #      - name: Do shit
 #        run: mkdir output; quarto render dashboard.qmd --output-dir output
 #      - uses: actions/upload-artifact@v4
