@@ -3,15 +3,17 @@ on:
   push:
     branches: [ main ]
 jobs:
-  container-test-job:
+  main_jbb:
     runs-on: ubuntu-latest
-    container:
-      image: analythium/r2u-quarto:20.04
     steps:
       - uses: actions/checkout@v4
-      - name: Do shit
-        run: mkdir output; quarto render dashboard.qmd --output-dir output
-      - uses: actions/upload-artifact@v4
+      - uses: quarto-dev/quarto-actions/setup@v2
+      - uses: quarto-dev/quarto-actions/render@v2
         with:
-          name: dashboard
-          path: output/dashboard.html
+          path: dashboard.qmd
+#      - name: Do shit
+#        run: mkdir output; quarto render dashboard.qmd --output-dir output
+#      - uses: actions/upload-artifact@v4
+#        with:
+#          name: dashboard
+#          path: output/dashboard.html
