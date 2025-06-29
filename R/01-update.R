@@ -1,7 +1,16 @@
 library(readr)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(forcats)
 library(reactable)
 library(crosstalk)
+library(htmltools)
+library(httr)
+library(countrycode)
+library(plotly)
+library(highcharter)
 #library(iffer)
 
 #' Concatenate All Unique Values
@@ -118,10 +127,6 @@ reactableThemeMint <- function(headerBackgroundColor = '#98ff98',
 }
 
 
-
-library(htmltools)
-library(shiny)
-library(httr)
 
 #local
 #csv_file <- "C:\\Users\\iffer\\Nextcloud\\winecellar\\cellar.csv"
@@ -531,7 +536,7 @@ wine_cntry <- wine_tbl|>group_by(Country) |>
   ungroup() |>
   mutate(Country = case_when(Country%in%c('US', 'USA')~'United States of America',
                              TRUE~Country))
-library(countrycode)
+
 eur <- codelist |> filter(continent=='Europe') |>
   select(country.name.en)
 wine_europe <- wine_tbl|>
@@ -543,8 +548,7 @@ wine_us <- wine_tbl|>
   filter(Country %in% c('US', 'USA', 'United States of America')) |>
   group_by(Region) |>
   summarise(Quantity = sum(Qty, na.rm = T))
-library(plotly)
-library(highcharter)
+
 # Load the world Map data
 data(worldgeojson, package = "highcharter")
 data(usgeojson, package = "highcharter")
