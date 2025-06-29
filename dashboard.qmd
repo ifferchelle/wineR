@@ -3,7 +3,7 @@ title: "Wenner Wine"
 format: 
   dashboard: 
     orientation: rows
-    logo: "WennerWine/www/wine.ico"
+    logo: wine.ico
     include-in-header:
     - text: |
         <link rel = "shortcut icon" href = "wine.ico" />
