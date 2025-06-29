@@ -8,6 +8,7 @@ jobs:
     container:
       image: analythium/r2u-quarto:20.04
     steps:
+      - uses: actions/checkout@v4
       - name: Do shit
         run: mkdir output; quarto render dashboard.qmd --output-dir output
       - uses: actions/upload-artifact@v4
