@@ -1,0 +1,16 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+jobs:
+  container-test-job:
+    runs-on: ubuntu-latest
+    container:
+      image: analythium/r2u-quarto:20.04
+    steps:
+      - name: Do shit
+        run: mkdir output; quarto render dashboard.qmd --output-dir output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dashboard
+          path: output/dashboard.html
